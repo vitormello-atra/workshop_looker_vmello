@@ -41,21 +41,46 @@ view: itens_pedidos {
   # Click on the type parameter to see all the options in the Quick Help panel on the right.
 
   measure: total_item_pedido_produto_preco {
+    label: "Preço"
+    value_format: "#,##0.00"
     type: sum
-    sql: ${item_pedido_produto_preco} ;;  }
-  measure: average_item_pedido_produto_preco {
-    type: average
-    sql: ${item_pedido_produto_preco} ;;  }
+    sql: ${TABLE}.item_pedido_produto_preco;;  }
 
-  dimension: item_pedido_quantidade {
-    type: number
+  measure: average_item_pedido_produto_preco {
+    label: "Média Preço"
+    value_format: "#,##0.00"
+    type: average
+    sql: ${TABLE}.item_pedido_produto_preco;;  }
+
+  measure: item_pedido_quantidade {
+    label: "Quantidade"
+    type: sum
     sql: ${TABLE}.item_pedido_quantidade ;;
   }
 
-  dimension: item_pedido_subtotal {
-    type: number
+  measure: item_pedido_subtotal {
+    label: "Valor Total"
+    value_format: "#,##0.00"
+    type: sum
     sql: ${TABLE}.item_pedido_subtotal ;;
   }
+
+  measure: item_pedido_subtotal_yes{
+    label: "Valor Total - Pedidos 365d"
+    value_format: "#,##0.00"
+    type: sum
+    sql: ${TABLE}.item_pedido_subtotal;;
+    filters: [pedidos.fez_pedido_ultimo_365d : "Yes" ]
+  }
+
+  measure: percent_pedido_ultimos_365{
+    label: "% Pedido Últimos365d"
+    type: number
+    value_format_name: percent_2
+    sql: 1.0*${item_pedido_subtotal_yes}
+      /NULLIF(${item_pedido_subtotal}, 0) ;;
+  }
+
   measure: count {
     type: count
   }

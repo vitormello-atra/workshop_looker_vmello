@@ -9,7 +9,8 @@ include: "/views/**/*.view.lkml"
 
 datagroup: workshop_looker_vmello_default_datagroup {
   # sql_trigger: SELECT MAX(id) FROM etl_log;;
-  max_cache_age: "1 hour"
+  max_cache_age: "12 hour"
+  interval_trigger: "24 hour"
 }
 
 persist_with: workshop_looker_vmello_default_datagroup
@@ -43,6 +44,18 @@ explore: clientes {
   join: produtos {
     type: full_outer
     sql_on: ${produtos.produto_id}=${itens_pedidos.item_pedido_produto_id} ;;
+    relationship: one_to_many
+  }
+
+  join: max_pedido_cliente {
+    type: full_outer
+    sql_on: ${clientes.cliente_cpf}=${max_pedido_cliente.clientes_cliente_cpf} ;;
+    relationship: one_to_many
+  }
+
+  join: pedido_cliente {
+    type: full_outer
+    sql_on: ${clientes.cliente_cpf}=${pedido_cliente.cliente_cpf} ;;
     relationship: one_to_many
   }
 }

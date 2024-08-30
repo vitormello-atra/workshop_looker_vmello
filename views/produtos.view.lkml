@@ -47,11 +47,15 @@ view: produtos {
   # Click on the type parameter to see all the options in the Quick Help panel on the right.
 
   measure: total_produto_preco {
+    hidden: yes
     type: sum
     sql: ${produto_preco} ;;  }
+
   measure: average_produto_preco {
+    hidden: yes
     type: average
     sql: ${produto_preco} ;;  }
+
   measure: count {
     type: count
     drill_fields: [produto_id]
